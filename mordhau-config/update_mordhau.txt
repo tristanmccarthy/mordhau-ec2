@@ -1,0 +1,6 @@
+@ShutdownOnFailedCommand 1
+@NoPromptForPassword 1
+force_install_dir ./mordhau
+app_update 629800 validate
+quit
+

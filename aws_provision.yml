@@ -10,7 +10,7 @@
     region: eu-west-2
     count: 1
   vars_files:
-    - aws_keys.yml
+    - secrets.yml
   tasks:
     - name: Create a security group
       ec2_group:
@@ -74,6 +74,49 @@
   become: yes
   gather_facts: no
   pre_tasks:
-   - name: 'install python'
-     raw: 'sudo apt-get -y install python'
-
+    - name: Install SteamCMD prerequisites
+      apt: 
+        name: lib32gcc1
+        state: present
+    - name: Install Mordhau prerequisites
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - 'libfontconfig1' 
+        - 'libpangocairo-1.0-0' 
+        - 'libnss3' 
+        - 'libgconf2-4' 
+        - 'libxi6' 
+        - 'libxcursor1' 
+        - 'libxss1' 
+        - 'libxcomposite1' 
+        - 'libasound2' 
+        - 'libxdamage1' 
+        - 'libxtst6' 
+        - 'libatk1.0-0' 
+        - 'libxrandr2'
+    - name: Create steam user
+      user:
+        name: steam
+  tasks:
+    - block:
+      become: yes
+      become_user: steam
+      - name: Install SteamCMD
+        apt: 
+          name: steam
+          state: present
+      - name: Create Mordhau installation file
+        file:
+          dest: "./update_mordhau.txt"
+          content: |
+            @ShutdownOnFailedCommand 1
+            @NoPromptForPassword 1
+            force_install_dir ./mordhau
+            app_update 629800 validate
+            quit
+      - name: Install Mordhau
+        shell: 'steamcmd +login {{ steam_username }} {{steam_password}} +runscript update_mordhau.txt
+      - name: Configure Mordhau
+        
