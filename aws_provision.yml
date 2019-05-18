@@ -73,50 +73,64 @@
   remote_user: ubuntu
   become: yes
   gather_facts: no
+  vars_files:
+    - secrets.yml
   pre_tasks:
+    - name: Install Python
+      raw: 'sudo apt-get -y install python'
+    - name: Enable i386 multiarch
+      raw: 'sudo dpkg --add-architecture i386'
+    - name: Create steam user
+      user:
+        name: steam
+  tasks:
     - name: Install SteamCMD prerequisites
-      apt: 
+      apt:
         name: lib32gcc1
+        state: present
+    - name: Pre-answer steam install question
+      debconf:
+        name: steam
+        question: steam/question
+        value: 'I AGREE'
+        vtype: select
+    - name: Pre-accept Steam licence agreement
+      debconf:
+        name: steam
+        question: steam/license
+        value: ''
+        vtype: note
+    - name: Install SteamCMD
+      apt:
+        name: steamcmd
         state: present
     - name: Install Mordhau prerequisites
       apt:
         name: "{{ item }}"
         state: present
       with_items:
-        - 'libfontconfig1' 
-        - 'libpangocairo-1.0-0' 
-        - 'libnss3' 
-        - 'libgconf2-4' 
-        - 'libxi6' 
+        - 'libfontconfig1'
+        - 'libpangocairo-1.0-0'
+        - 'libnss3'
+        - 'libgconf2-4'
+        - 'libxi6'
         - 'libxcursor1' 
-        - 'libxss1' 
-        - 'libxcomposite1' 
-        - 'libasound2' 
+        - 'libxss1'
+        - 'libxcomposite1'
+        - 'libasound2'
         - 'libxdamage1' 
-        - 'libxtst6' 
+        - 'libxtst6'
         - 'libatk1.0-0' 
         - 'libxrandr2'
-    - name: Create steam user
-      user:
-        name: steam
-  tasks:
     - block:
-      become: yes
-      become_user: steam
-      - name: Install SteamCMD
-        apt: 
-          name: steam
-          state: present
       - name: Create Mordhau installation file
-        file:
-          dest: "./update_mordhau.txt"
-          content: |
-            @ShutdownOnFailedCommand 1
-            @NoPromptForPassword 1
-            force_install_dir ./mordhau
-            app_update 629800 validate
-            quit
-      - name: Install Mordhau
-        shell: 'steamcmd +login {{ steam_username }} {{steam_password}} +runscript update_mordhau.txt
-      - name: Configure Mordhau
-        
+        copy:
+          src: ./mordhau-config/update_mordhau.txt
+          dest: ~/update_mordhau.txt
+          owner: steam
+          group: steam
+          mode: '0664'
+      #- name: Install Mordhau
+      #  shell: 'steamcmd +login {{ steam_username }} {{steam_password}} +runscript update_mordhau.txt'
+      become: true
+      become_user: steam

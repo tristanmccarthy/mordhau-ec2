@@ -103,5 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# ansible execution logs
+# ansible gumpf
 *.swp
+*.retry

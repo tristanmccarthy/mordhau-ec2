@@ -3,7 +3,7 @@
   vars:
     region: eu-west-2
   vars_files:
-    - aws_keys.yml
+    - secrets.yml
   tasks:
     - name: Gather EC2 facts
       ec2_instance_facts:
