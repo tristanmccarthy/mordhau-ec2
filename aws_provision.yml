@@ -32,6 +32,18 @@
             from_port: 443
             to_port: 443
             cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 7777
+            to_port: 7777
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 27015
+            to_port: 27015
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 15000
+            to_port: 15000
+            cidr_ip: 0.0.0.0/0
         rules_egress:
           - proto: all
             cidr_ip: 0.0.0.0/0
@@ -72,6 +84,7 @@
 - hosts: gameservers
   remote_user: ubuntu
   become: yes
+  become_method: sudo 
   gather_facts: no
   vars_files:
     - secrets.yml
@@ -80,29 +93,20 @@
       raw: 'sudo apt-get -y install python'
     - name: Enable i386 multiarch
       raw: 'sudo dpkg --add-architecture i386'
+  tasks:
     - name: Create steam user
       user:
         name: steam
-  tasks:
+        password: $6$Vstd9lZ03YQoU$/sO1.MQ6XVb0xW/MQGwfCPgObsRjd8boU1lu6hVrZZyqa/ku13ZmdFAn2SubDt/OCejrTMBh.67Q3UAJHwPa50
+        groups:
+          - sudo
+        shell: /bin/bash
+        system: no
+        createhome: yes
+        home: /home/steam
     - name: Install SteamCMD prerequisites
       apt:
         name: lib32gcc1
-        state: present
-    - name: Pre-answer steam install question
-      debconf:
-        name: steam
-        question: steam/question
-        value: 'I AGREE'
-        vtype: select
-    - name: Pre-accept Steam licence agreement
-      debconf:
-        name: steam
-        question: steam/license
-        value: ''
-        vtype: note
-    - name: Install SteamCMD
-      apt:
-        name: steamcmd
         state: present
     - name: Install Mordhau prerequisites
       apt:
@@ -114,23 +118,39 @@
         - 'libnss3'
         - 'libgconf2-4'
         - 'libxi6'
-        - 'libxcursor1' 
+        - 'libxcursor1'
         - 'libxss1'
         - 'libxcomposite1'
         - 'libasound2'
-        - 'libxdamage1' 
+        - 'libxdamage1'
         - 'libxtst6'
-        - 'libatk1.0-0' 
+        - 'libatk1.0-0'
         - 'libxrandr2'
-    - block:
-      - name: Create Mordhau installation file
-        copy:
-          src: ./mordhau-config/update_mordhau.txt
-          dest: ~/update_mordhau.txt
+    - block:  
+      - name: Unpack SteamCMD archive
+        unarchive: 
+          src: https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+          dest: ~/
+          remote_src: yes
+          validate_certs: no
+      - name: Install Mordhau dedicated server
+        shell: /home/steam/steamcmd.sh +login anonymous +force_install_dir ./mordhau +app_update 629800 +quit
+      - name: Create Mordhau config folders if not present
+        file:
+          path: "{{ item }}"
+          state: directory
           owner: steam
           group: steam
-          mode: '0664'
-      #- name: Install Mordhau
-      #  shell: 'steamcmd +login {{ steam_username }} {{steam_password}} +runscript update_mordhau.txt'
+          mode: 0775
+        with_items:
+          - ~/mordhau/Mordhau/Saved/Config/LinuxServer
+      - name: Add customised game ini file
+        copy:
+          src: Game.ini
+          dest: ~/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini
+          owner: steam
+          group: steam
+          mode: 0664     
       become: true
       become_user: steam
+      become_method: sudo
