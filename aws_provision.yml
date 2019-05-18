@@ -1,7 +1,6 @@
 ---
 - hosts: local
   connection: local
-  remote_user: ubuntu
   gather_facts: no
   vars:
     instance_type: t2.micro
@@ -12,9 +11,6 @@
     count: 1
   vars_files:
     - aws_keys.yml
-  pre-tasks:
-    -name: install python
-     raw: 'sudo apt-get -y install python'
   tasks:
     - name: Create a security group
       ec2_group:
@@ -51,7 +47,7 @@
         key_name: "{{ key_name }}"
         count: "{{count}}"
       register: ec2
-    - name: Add the newly created host so that we can contact it
+    - name: Add the newly created instance to host group
       add_host:
         name: "{{ item.public_ip }}"
         groups: gameservers
@@ -73,3 +69,11 @@
         port: 22 
         state: started 
       with_items: "{{ ec2.instances }}"
+- hosts: gameservers
+  remote_user: ubuntu
+  become: yes
+  gather_facts: no
+  pre_tasks:
+   - name: 'install python'
+     raw: 'sudo apt-get -y install python'
+
