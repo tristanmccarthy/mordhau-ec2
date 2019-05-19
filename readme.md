@@ -17,27 +17,33 @@ and automated it as I went.
 
 ## Steps - build server
 1. Clone this repository
-2. Delete the secrets.yml file
-3. Create a new secrets.yml file with the following command:
-  ansible-vault create secrets.yml
+2. Delete the existing `secrets.yml` file (it's encrypted, you won't be able to use it)
+3. Create a new `secrets.yml` file with the following command:
+```
+ansible-vault create secrets.yml
+```
 4. Select a passwords for the secrets file when prompted
-5. Enter the following values in the secrets.yml file
+5. Enter the following values in the `secrets.yml` file
 ```
 aws_access_key: <your access key>
 aws_secret_key: <your secret key>
 key_name: <your ssh key pair name>
 ``` 
-6. Modify files/Game.ini and change the ServerName, ServerPassword and AdminPassword values to your own. You'll probably also want to clear the list of Admins steamid's.
+6. Modify `/files/Game.ini` and change the ServerName, ServerPassword and AdminPassword values to your own. You'll probably also want to clear the list of Admins steamid's.
 7. Run the build process with the following command:
-  ansible-playbook -i hosts --ask-vault-pass aws_provision.yml
+```
+ansible-playbook -i hosts --ask-vault-pass aws_provision.yml
+```
 8. Enter the password you chose for your secrets file when prompted
   
 ## Steps - terminate server
 1. Run the terminate process with the following command:
-  ansible-playbook -i hosts --ask-vault-pass aws_terminate.yml
+```
+ansible-playbook -i hosts --ask-vault-pass aws_terminate.yml
+```
 2. Enter the password you chose for your secrets file when prompted
 
 ## Further customisation (Optional)
-1. If you want to try running a full scale 64 person server you will need to increase the instance size. This will incur AWS costs and I've not done any testing to figure out what instance you'd need. The type can be changed in the instance_type value in aws_provisioning.yml. Full list of instance types: https://aws.amazon.com/ec2/instance-types/
-2. Change the map rotation and other settings in the Game.ini under /files to change what maps appear for voting
-3. The current settings create instances in eu-west-2 (London). If you want something closer to home this can be changed in the region value in aws_provisioning.yml. Full list of regions: https://docs.aws.amazon.com/general/latest/gr/rande.html
+1. If you want to try running a full scale 64 person server you will need to increase the instance size. This will incur AWS costs and I've not done any testing to figure out what instance you'd need. The type can be changed in the `instance_type` value in `aws_provisioning.yml`. Full list of instance types: https://aws.amazon.com/ec2/instance-types/
+2. Change the map rotation and other settings in the `/files/Game.ini` to change what maps appear for voting
+3. The current settings create instances in eu-west-2 (London). If you want something closer to home this can be changed in the `region` value in `aws_provisioning.yml`. Full list of regions: https://docs.aws.amazon.com/general/latest/gr/rande.html
