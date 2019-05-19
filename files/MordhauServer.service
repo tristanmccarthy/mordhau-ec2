@@ -1,0 +1,19 @@
+[Unit]
+Description=Mordhau Server
+Requires=network.target local-fs.target
+After=network.target local-fs.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+StartLimitInterval=60s
+StartLimitBurst=3
+User=steam
+Group=steam
+ExecStartPre=/home/steam/steamcmd.sh +login anonymous +runscript /home/steam/update_mordhau.txt
+ExecStart=/home/steam/mordhau/Mordhau/Binaries/Linux/MordhauServer-Linux-Shipping Mordhau
+ExecStop=/bin/kill -SIGINT $MAINPID
+
+[Install]
+WantedBy=multi-user.target

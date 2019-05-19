@@ -133,8 +133,15 @@
           dest: ~/
           remote_src: yes
           validate_certs: no
+      - name: Add Mordhau installation file
+        copy:
+          src: update_mordhau.txt
+          dest: ~/update_mordhau.txt
+          owner: steam
+          group: steam
+          mode: 0664
       - name: Install Mordhau dedicated server
-        shell: /home/steam/steamcmd.sh +login anonymous +force_install_dir ./mordhau +app_update 629800 +quit
+        shell: /home/steam/steamcmd.sh +login anonymous +runscript update_mordhau.txt
       - name: Create Mordhau config folders if not present
         file:
           path: "{{ item }}"
@@ -154,3 +161,14 @@
       become: true
       become_user: steam
       become_method: sudo
+    - name: Add Mordhau systemd file
+      copy:
+        src: MordhauServer.service 
+        dest: /etc/systemd/system/MordhauServer.service          
+        owner: root
+        group: root
+        mode: 0664
+    - name: Start Mordhau server
+      systemd:
+        state: started
+        name: MordhauServer 
