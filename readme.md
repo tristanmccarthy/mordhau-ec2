@@ -37,5 +37,5 @@ and automated it as I went.
 
 ## Further customisation (Optional)
 1. If you want to try running a full scale 64 person server you will need to increase the instance size. This will incur AWS costs and I've not done any testing to figure out what instance you'd need. The type can be changed in the instance_type value in aws_provisioning.yml. Full list of instance types: https://aws.amazon.com/ec2/instance-types/
-2. Change the map rotation and other settings in the Game.ini to change what maps appear for voting
+2. Change the map rotation and other settings in the Game.ini under /files to change what maps appear for voting
 3. The current settings create instances in eu-west-2 (London). If you want something closer to home this can be changed in the region value in aws_provisioning.yml. Full list of regions: https://docs.aws.amazon.com/general/latest/gr/rande.html
