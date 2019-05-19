@@ -6,7 +6,6 @@
     instance_type: t2.micro
     security_group: gameservers_sg
     image: ami-07dc734dc14746eab
-    key_name: tmccarthy
     region: eu-west-2
     count: 1
   vars_files:
