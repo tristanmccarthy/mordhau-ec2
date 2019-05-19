@@ -22,9 +22,11 @@ and automated it as I went.
   ansible-vault create secrets.yml
 4. Select a passwords for the secrets file when prompted
 5. Enter the following values in the secrets.yml file
-  aws_access_key: <your access key>
-  aws_secret_key: <your secret key>
-  key_name: <your ssh key pair name>
+```
+aws_access_key: <your access key>
+aws_secret_key: <your secret key>
+key_name: <your ssh key pair name>
+``` 
 6. Modify files/Game.ini and change the ServerName, ServerPassword and AdminPassword values to your own. You'll probably also want to clear the list of Admins steamid's.
 7. Run the build process with the following command:
   ansible-playbook -i hosts --ask-vault-pass aws_provision.yml
