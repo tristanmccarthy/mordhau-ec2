@@ -1,5 +1,4 @@
-Mordhau-ec2
-===============
+# Mordhau-ec2
 
 This set of Ansible scripts supports the provision and termination of a private Mordhau server running in Amazon Web Services (AWS).
 
@@ -9,18 +8,14 @@ Early version, will evolve to include integration with a build server (probably 
 Mostly followed the guide on the Mordhau forums here: https://mordhau.com/forum/topic/10348/dedicated-server-hosting-guide-linux/ 
 and automated it as I went
 
-Pre-Requisites
-===============
-
+## Pre-Requisites
 1. Create an AWS account
 2. Create a set of AWS access keys in your AWS account (under IAM -> Users)
 3. Create an SSH keypair in your AWS account (under EC2 -> Network & Security -> Key Pairs)
 4. Install Ansible (ideally under linux)
 5. Install Boto and Boto3
 
-Steps - build server
-====================
-
+## Steps - build server
 1. Clone this repository
 2. Delete the secrets.yml file
 3. Create a new secrets.yml file with the following command:
@@ -35,13 +30,11 @@ Steps - build server
   ansible-playbook -i hosts --ask-vault-pass aws_provision.yml
 8. Enter the password you chose for your secrets file when prompted
 
-Steps - build server (Optional)
-====================
+## Steps - build server (Optional)
 1. Change the map rotation and other settings in the Game.ini to further customise the server
 2. Change the instance_type value in aws_provision.yml to support higher utilisation (note, this will incur AWS hosting costs)
 
-Steps - terminate server
-===================
+## Steps - terminate server
 1. Run the terminate process with the following command:
   ansible-playbook -i hosts --ask-vault-pass aws_terminate.yml
 2. Enter the password you chose for your secrets file when prompted
