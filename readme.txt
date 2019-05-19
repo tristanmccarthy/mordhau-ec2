@@ -3,9 +3,11 @@ Mordhau-ec2
 
 This set of Ansible scripts supports the provision and termination of a private Mordhau server running in Amazon Web Services (AWS).
 
-By default the server runs on a t2.micro instance which is free under Amazon's free tier accounts and is suitable for basic testing and small scale use. If you are willing to pay a little, a simple config change will increase the size of the instance to support larger scale battles.
+By default the server runs on a t2.micro instance which is free under Amazon's free tier accounts and is suitable for basic testing and small scale use. 
+If you are willing to pay a little, a simple config change will increase the size of the instance to support larger scale battles.
 Early version, will evolve to include integration with a build server (probably circleci) and a better ansible structure.
-Mostly followed the guide on the Mordhau forums here: https://mordhau.com/forum/topic/10348/dedicated-server-hosting-guide-linux/ and automated it as I went
+Mostly followed the guide on the Mordhau forums here: https://mordhau.com/forum/topic/10348/dedicated-server-hosting-guide-linux/ 
+and automated it as I went
 
 Pre-Requisites
 ===============
