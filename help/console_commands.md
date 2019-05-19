@@ -29,11 +29,11 @@
 **demoplay** // Plays a demo.
 **Stat FPS** // Shows the FPS counter
 # Map List
-|Front Line|Skirmage|Team Deathmatch|Free For All|Horde||
+|Front Line|Skirmage|Team Deathmatch|Free For All|Horde|Battle Royale|
 |--|--|--|--|--|--|
-|FL_Taiga  |SKM_Contraband|TDM_Contraband|FFA_Contraband |HRD_Camp|Battle Royale|
-|FL_MountainPeak|SKM_Camp|TDM_Camp|FFA_Camp|HRD_Grad|BR_Grad|
-|FL_Camp |SKM_Grad|TDM_Camp_64|FFA_Grad |HRD_Taiga|BR_Taiga|
+|FL_Taiga  |SKM_Contraband|TDM_Contraband|FFA_Contraband |HRD_Camp|BR_Grad|
+|FL_MountainPeak|SKM_Camp|TDM_Camp|FFA_Camp|HRD_Grad|BR_Taiga|
+|FL_Camp |SKM_Grad|TDM_Camp_64|FFA_Grad |HRD_Taiga||
 |FL_Grad |SKM_ThePit |TDM_Grad|FFA_ThePit|HRD_MountainPeak ||
 ||SKM_MountainPeak|TDM_ThePit |FFA_MountainPeak|||
 ||SKM_Tourney|TDM_MountainPeak|FFA_Taiga|||
