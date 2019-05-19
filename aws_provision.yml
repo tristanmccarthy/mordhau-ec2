@@ -88,11 +88,8 @@
     - name: Create steam user
       user:
         name: steam
-        password: $6$Vstd9lZ03YQoU$/sO1.MQ6XVb0xW/MQGwfCPgObsRjd8boU1lu6hVrZZyqa/ku13ZmdFAn2SubDt/OCejrTMBh.67Q3UAJHwPa50
-        groups:
-          - sudo
-        shell: /bin/bash
-        system: no
+        system: yes
+        state: present
         createhome: yes
         home: /home/steam
     - name: Install SteamCMD prerequisites
