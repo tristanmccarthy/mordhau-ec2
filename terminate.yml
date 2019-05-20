@@ -1,0 +1,8 @@
+---
+- hosts: local
+  connection: local
+  gather_facts: no
+  roles:
+    - ec2
+  tasks:
+    - include: roles/ec2/tasks/terminate.yml
