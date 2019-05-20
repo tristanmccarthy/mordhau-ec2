@@ -32,7 +32,7 @@ key_name: <your ssh key pair name>
 6. Modify `/files/Game.ini` and change the ServerName, ServerPassword and AdminPassword values to your own. You'll probably also want to clear the list of Admins steamid's.
 7. Run the build process with the following command:
 ```
-ansible-playbook -i hosts --ask-vault-pass aws_provision.yml
+ansible-playbook -i hosts --ask-vault-pass aws_provision_rhel.yml
 ```
 8. Enter the password you chose for your secrets file when prompted
   
