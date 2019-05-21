@@ -4,9 +4,8 @@ This set of Ansible scripts supports the provision and termination of a private 
 
 By default the server runs on a t2.micro instance which doesn't cost anything under Amazon's free tier accounts. Initial tests have shown that this size of instance is fine for a couple of people playing with bots before the ping starts to suffer. This is fine for testing purposes but would need to be scaled up for a real server (see further customisation).
 
-Early version, will evolve to include integration with a build server (probably circleci) and a better ansible structure.
 Mostly followed the guide on the Mordhau forums here: https://mordhau.com/forum/topic/10348/dedicated-server-hosting-guide-linux/ 
-and automated it as I went.
+and automated it as I went. I switched from a RHEL AMI using apt-get to an AWS Linux image using yum to install dependencies due to lower costs when scaling up this OS.
 
 ## Pre-Requisites
 1. Create an AWS account
