@@ -34,7 +34,8 @@ key_name: <your ssh key pair name>
 ansible-playbook -i hosts --ask-vault-pass gameserver.yml
 ```
 8. Enter the password you chose for your secrets file when prompted
-  
+NOTE: The above command will terminate any existing gameserver instances before creating, to ensure you only ever have one.  
+
 ## Steps - terminate server
 1. Run the terminate process with the following command:
 ```

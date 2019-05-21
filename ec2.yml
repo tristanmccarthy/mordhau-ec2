@@ -5,5 +5,6 @@
   roles:
     - ec2
   tasks:
+    - include: roles/ec2/tasks/terminate.yml
     - include: roles/ec2/tasks/security_group.yml
     - include: roles/ec2/tasks/provision.yml
