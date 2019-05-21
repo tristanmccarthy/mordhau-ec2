@@ -1,0 +1,28 @@
+- name: Create a security group
+  ec2_group:
+    name: "{{ security_group }}"
+    description: The gameservers security group
+    region: "{{ region }}"
+    aws_access_key: "{{ secrets.aws_access_key }}"
+    aws_secret_key: "{{ secrets.aws_secret_key }}"
+    state: present
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: udp
+        from_port: 7777
+        to_port: 7777
+        cidr_ip: 0.0.0.0/0
+      - proto: udp
+        from_port: 27015
+        to_port: 27015
+        cidr_ip: 0.0.0.0/0
+      - proto: udp
+        from_port: 15000
+        to_port: 15000
+        cidr_ip: 0.0.0.0/0
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0

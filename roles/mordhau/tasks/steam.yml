@@ -1,0 +1,28 @@
+- name: Install Python
+  yum:
+    name: python
+    state: present
+- name: Create steam user
+  user:
+    name: steam
+    system: yes
+    state: present
+    createhome: yes
+    home: /home/steam
+- block:
+  - name: Install SteamCMD prerequisites
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - glibc.i686
+      - libstdc++.i686
+  - name: Unpack SteamCMD archive
+    unarchive:
+      src: https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+      dest: ~/
+      remote_src: yes
+      validate_certs: no
+    become: true
+    become_user: steam
+    become_method: sudo

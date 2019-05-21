@@ -1,0 +1,60 @@
+- name: Install Mordhau prerequisites
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - pango.i686
+    - fontconfig.i686
+    - glibc.i686
+    - libstdc++.i686
+    - nss.i686
+    - GConf2.i686
+    - libXi.i686
+    - libXcursor.i686
+    - libXScrnSaver.i686
+    - libXcomposite.i686
+    - alsa-lib.i686
+    - libXdamage.i686
+    - libXtst.i686
+    - atk.i686
+    - libXrandr.i686
+- block:
+  - name: Add Mordhau installation file
+    copy:
+      src: update_mordhau.txt
+      dest: ~/update_mordhau.txt
+      owner: steam
+      group: steam
+      mode: 0664
+  - name: Install Mordhau dedicated server
+    shell: /home/steam/steamcmd.sh +login anonymous +runscript update_mordhau.txt
+  - name: Create Mordhau config folders if not present
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: steam
+      group: steam
+      mode: 0775
+    with_items:
+      - ~/mordhau/Mordhau/Saved/Config/LinuxServer
+  - name: Add customised game ini file
+    copy:
+      src: Game.ini
+      dest: ~/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini
+      owner: steam
+      group: steam
+      mode: 0664
+  become: true
+  become_user: steam
+  become_method: sudo
+- name: Add Mordhau systemd file
+  copy:
+    src: MordhauServer.service
+    dest: /etc/systemd/system/MordhauServer.service
+    owner: root
+    group: root
+    mode: 0664
+- name: Start Mordhau server
+  systemd:
+    state: started
+    name: MordhauServer

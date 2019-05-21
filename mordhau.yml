@@ -1,0 +1,11 @@
+---
+- hosts: gameservers
+  remote_user: "{{ ssh_user }}"
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  roles:
+    - mordhau
+  tasks:
+    - include: roles/mordhau/tasks/steam.yml
+    - include: roles/mordhau/tasks/mordhau_server.yml

@@ -1,0 +1,35 @@
+- name: Launch the new EC2 Instance
+  ec2:
+    aws_access_key: "{{ secrets.aws_access_key }}"
+    aws_secret_key: "{{ secrets.aws_secret_key }}"
+    group: "{{ security_group }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ image }}"
+    wait: true
+    region: "{{ region }}"
+    key_name: "{{ secrets.key_name }}"
+    count: "{{count}}"
+    state: present
+  register: ec2
+- name: Add the newly created instance to host group
+  add_host:
+    name: "{{ item.public_ip }}"
+    groups: gameservers
+  with_items: "{{ ec2.instances }}"
+- name: Add tag to Instance(s)
+  ec2_tag:
+    aws_access_key: "{{ secrets.aws_access_key }}"
+    aws_secret_key: "{{ secrets.aws_secret_key }}"
+    resource: "{{ item.id }}"
+    region: "{{ region }}"
+    state: "present"
+  with_items: "{{ ec2.instances }}"
+  args:
+    tags:
+      Type: gameserver
+- name: Wait for SSH to come up
+  wait_for:
+    host: "{{ item.public_ip }}"
+    port: 22
+    state: started
+  with_items: "{{ ec2.instances }}"

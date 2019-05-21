@@ -1,0 +1,3 @@
+---
+- import_playbook: ec2.yml
+- import_playbook: mordhau.yml
